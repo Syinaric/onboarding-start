@@ -125,23 +125,38 @@ async def test_pwm_freq(dut):
     await send_spi_transaction(dut, 1, 0x02, 0x01)
     await send_spi_transaction(dut, 1, 0x04, 0x80)
     await ClockCycles(dut.clk, 500)
+
     timeout = 100000
+
+    # Wait for signal to go low first (clean starting point)
+    for _ in range(timeout):
+        await ClockCycles(dut.clk, 1)
+        if not (dut.uo_out.value & 0x01):
+            break
+
+    # Find first rising edge
     for _ in range(timeout):
         await ClockCycles(dut.clk, 1)
         if dut.uo_out.value & 0x01:
             break
     first_rising = cocotb.utils.get_sim_time(units="ns")
+
+    # Wait for it to go low
     for _ in range(timeout):
         await ClockCycles(dut.clk, 1)
         if not (dut.uo_out.value & 0x01):
             break
+
+    # Find second rising edge
     for _ in range(timeout):
         await ClockCycles(dut.clk, 1)
         if dut.uo_out.value & 0x01:
             break
     second_rising = cocotb.utils.get_sim_time(units="ns")
+
     period_ns = second_rising - first_rising
     frequency = 1e9 / period_ns
+
     dut._log.info(f"Measured period: {period_ns} ns, frequency: {frequency:.2f} Hz")
     assert 2970 <= frequency <= 3030, f"Frequency out of range: {frequency:.2f} Hz"
     dut._log.info("PWM Frequency test completed successfully")
