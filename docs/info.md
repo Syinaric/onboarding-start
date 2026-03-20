@@ -1,20 +1,17 @@
-<!---
-
-This file is used to generate your project datasheet. Please fill in the information below and delete any unused
-sections.
-
-You can also include images in this folder and reference them in the markdown. Each image must be less than
-512 kb in size, and the combined size of all images must be less than 1 MB.
--->
-
 ## How it works
 
-Explain how your project works
+This project implements an SPI-controlled PWM peripheral. It receives SPI transactions (Mode 0, 16 cycles per transaction) to write to 5 registers that control output enables and PWM settings across 16 output pins. The PWM signal runs at ~3 kHz derived from a 10 MHz clock.
 
 ## How to test
 
-Explain how to use your project
+Send SPI transactions using SCLK (ui[0]), COPI (ui[1]), and nCS (ui[2]).
+Write to the following registers:
+- 0x00: Enable outputs on uo_out[7:0]
+- 0x01: Enable outputs on uio_out[7:0]
+- 0x02: Enable PWM on uo_out[7:0]
+- 0x03: Enable PWM on uio_out[7:0]
+- 0x04: Set PWM duty cycle (0x00=0%, 0xFF=100%)
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+None required.
