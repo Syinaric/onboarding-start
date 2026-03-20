@@ -23,8 +23,8 @@ module spi_peripheral (
 
     // Edge detection
     wire SCLK_rising = ( SCLK_sync2 && !SCLK_sync3);
-    wire nCS_falling = (!nCS_sync1  &&  nCS_sync2);
-    wire nCS_rising  = ( nCS_sync1  && !nCS_sync2);
+    wire nCS_falling = (!nCS_sync2  &&  nCS_sync1);
+    wire nCS_rising  = ( nCS_sync2  && !nCS_sync1);
 
     // Transaction state
     reg [15:0] shift_reg;
