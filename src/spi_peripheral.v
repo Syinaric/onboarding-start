@@ -28,7 +28,7 @@ module spi_peripheral (
 
     // Transaction state
     reg [15:0] shift_reg;
-    reg [3:0]  bit_count;
+    reg [4:0]  bit_count;
     reg        transaction_ready;
     reg        transaction_processed;
 
@@ -50,7 +50,7 @@ module spi_peripheral (
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             shift_reg         <= 16'b0;
-            bit_count         <= 4'b0;
+            bit_count         <= 5'b0;
             transaction_ready <= 1'b0;
         end else begin
             if (transaction_processed) begin
@@ -58,10 +58,10 @@ module spi_peripheral (
             end
             if (nCS_sync2 == 1'b1) begin
                 if (nCS_rising) begin
-                    if (bit_count == 4'd15) begin
+                    if (bit_count == 5'd16) begin
                         transaction_ready <= 1'b1;
                     end
-                    bit_count <= 4'b0;
+                    bit_count <= 5'b0;
                 end
             end else begin
                 // nCS low = active transaction, shift in bits
