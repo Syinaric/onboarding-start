@@ -13,8 +13,6 @@ module spi_peripheral (
     output reg  [7:0] pwm_duty_cycle
 );
 
-    localparam MAX_ADDRESS = 7'h04;
-
     // 2-stage synchronizers
     reg COPI_sync1, COPI_sync2;
     reg nCS_sync1,  nCS_sync2,  nCS_sync3;
